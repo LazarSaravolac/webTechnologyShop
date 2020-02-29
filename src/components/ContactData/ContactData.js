@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { ProductConsumer } from '../../context';
 import { updateObject, checkValidity } from '../shared/utility';
-//import Input from '../Input';
+import Input from '../../Input/Input';
+import classes from './ContactData.css';
 export default class ContactData extends Component { 
     state = {
         orderForm: {
@@ -113,8 +114,10 @@ const orderHandler = (event) => {
         cartTotal: value.cartTotal,
         orderData: formData,
     }
-
-    value.onOrder(order);
+    
+    console.log(order);
+    
+    value.onOrder();
 
 }
 
@@ -144,33 +147,36 @@ const inputChangedHandler = (event, inputIdentifier) => {
                             });
                         }
 
-                        // let form = (
-                        //     <form onSubmit={this.orderHandler}>
-                        //         {formElementsArray.map(formElement => (
-                        //             <Input 
-                        //                 key={formElement.id}
-                        //                 elementType={formElement.config.elementType}
-                        //                 elementConfig={formElement.config.elementConfig}
-                        //                 value={formElement.config.value}
-                        //                 invalid={!formElement.config.valid}
-                        //                 shouldValidate={formElement.config.validation}
-                        //                 touched={formElement.config.touched}
-                        //                 changed={(event) => this.inputChangedHandler(event, formElement.id)} />
-                        //         ))}
-                        //         {/* <Button btnType="Success" disabled={!this.state.formIsValid}>ORDER</Button> */}
-                        //         <button className="btn btn-outline-danger text-uppercase mb-3 px-5"
-                        //          type="button"  disabled={!this.state.formIsValid}>
-                        //         ORDER
-                        //     </button>
-                        //     </form>
-                        // );
+                        let form = (
+                            <form >
+                                {formElementsArray.map(formElement => (
+                                    <Input 
+                                        key={formElement.id}
+                                        elementType={formElement.config.elementType}
+                                        elementConfig={formElement.config.elementConfig}
+                                        value={formElement.config.value}
+                                        invalid={!formElement.config.valid}
+                                        shouldValidate={formElement.config.validation}
+                                        touched={formElement.config.touched}
+                                        changed={(event) => inputChangedHandler(event, formElement.id)} />
+                                ))}
+                                {/* <Button btnType="Success" disabled={!this.state.formIsValid}>ORDER</Button> */}
+                                <button className="btn btn-outline-danger text-uppercase mb-3 px-5"
+                                 type="button" onClick={(event)=>orderHandler(event)} >
+                                ORDER
+                            </button>
+                            </form>
+                        );
                         
 
 
 
 
                         return (
-                        <React.Fragment>das</React.Fragment>)
+                            <div className={classes.ContactData}>
+                            <h4>Enter your Contact Data</h4>
+                            {form}
+                        </div>)
                         }}
                 </ProductConsumer>
           </React.Fragment>  
