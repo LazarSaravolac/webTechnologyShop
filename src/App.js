@@ -16,6 +16,7 @@ import Contact from '../src/components/Contact';
 import TabletList from '../src/components/TabletList';
 import DroneList from '../src/components/DroneList';
 import PhoneListPagination from '../src/components/PhoneListPagination';
+import ContactData from '../src/components/ContactData/ContactData';
 
 import TVListPagination from '../src/components/TVListPagination';
 export default class App extends Component {
@@ -34,6 +35,7 @@ export default class App extends Component {
           <Route path="/details-tv" exact component={DetailsTV} />
           <Route path="/contact" exact component={Contact} />
           <Route path="/phone" exact component={PhoneListPagination} />
+          <Route path="/contactData" exact component={ContactData} />
           <Route component={Default} />
         </Switch>
         <Modal />

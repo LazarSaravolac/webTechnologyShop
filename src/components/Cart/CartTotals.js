@@ -35,6 +35,12 @@ export default function CartTotals({value}) {
                             </span>
                             <strong>$ {cartTotal}</strong>
                         </h5>
+                        <Link to="/contactData">
+                            <button className="btn btn-outline-success text-uppercase mb-3 px-5"
+                                onClick={()=>console.log()} type="button">
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Buy&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </button>
+                        </Link>
                     </div>
                 </div>
             </div>

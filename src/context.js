@@ -332,6 +332,12 @@ class ProductProvider extends Component {
             }
         })
     }
+
+    onOrder = () => {
+
+        console.log("Naruci");
+        
+    }
     
 
   render (){
@@ -350,7 +356,8 @@ class ProductProvider extends Component {
           handleDetailTV: this.handleDetailTV,
           openModalTV:this.openModalTV,
           closeModalTV: this.closeModalTV,
-          handleChange:this.handleChange
+          handleChange: this.handleChange,
+          onOrder:this.onOrder
       }}>
       {this.props.children}    
      </ProductContext.Provider>
