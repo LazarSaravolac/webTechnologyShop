@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import Client from './Contentful';
-Client.getEntries({
-    content_type:"storePhones"
-}).then(res=>console.log(res.items));
+
+
+
 const ProductContext = React.createContext();
+
 
 
 class ProductProvider extends Component {
@@ -20,12 +21,16 @@ class ProductProvider extends Component {
         cartTotal:0,
         detailTV: null,
         modalTV: {price:0,img:0,title:0},
-        modalOpenTV:false
+        modalOpenTV: false,
+        sortedPhones: [],
+        price: 0,
+        maxPrice:0
     }
 
     componentDidMount() {
         this.getDataPhone();
         this.getDataTV();
+        
         // this.setProducts();
     }
 
@@ -37,15 +42,38 @@ class ProductProvider extends Component {
            
             let phones = this.formatData(responsePhone.items);
           
-
+            let maxPrice = Math.max(...phones.map(item => item.price));
             this.setState({
-                phones
+                phones:phones,
+                sortedPhones: phones,
+                price: maxPrice,
+                maxPrice:maxPrice
             })
         } catch(error){
             console.log(error + 1);
             
         }
     }
+
+    handleChange = (event) => {
+       
+        this.setState({
+            price:event.target.value
+        },this.filterPhones)
+      
+        
+    }
+
+
+    filterPhones = () => {
+        let { phones} = this.state;
+        let tempPhones = [...phones];
+        tempPhones = tempPhones.filter(car => car.price <= this.state.price);
+        this.setState({
+            sortedPhones: tempPhones
+        })
+    }
+
 
     getDataTV = async () => {
         try{
@@ -78,7 +106,7 @@ class ProductProvider extends Component {
             let total = fields.total;
             let title = fields.title;
             let info = fields.info.content[0].content[0].value;
-            console.log(images);
+          
             
             let phone = { price,company,inCart,count,total, img, id,info ,title};
             return phone;
@@ -219,7 +247,7 @@ class ProductProvider extends Component {
         let product = tempCart[index];
         product.count -= 1;
         if (product.count === 0) {
-            this.removeItem(id);
+             this.removeItem(id);
             return;
         }
         const price = product.price;
@@ -242,7 +270,7 @@ class ProductProvider extends Component {
         let removedProduct;
         let index = tempPhones.indexOf(this.getItem(id));
         if (index === -1) {
-            console.log(id);
+           
             
             index = tempTV.indexOf(this.getItemTV(id));
             removedProduct = tempTV[index];
@@ -258,7 +286,7 @@ class ProductProvider extends Component {
             }, () => {
                     this.addTotals();
             })
-            console.log("tv");
+           
             
             return;
         }
@@ -276,7 +304,7 @@ class ProductProvider extends Component {
                 this.addTotals();
         })
 
-        console.log("product");
+       
             
     }
 
@@ -304,6 +332,7 @@ class ProductProvider extends Component {
             }
         })
     }
+    
 
   render (){
   return(
@@ -320,7 +349,8 @@ class ProductProvider extends Component {
           clearCart:this.clearCart,
           handleDetailTV: this.handleDetailTV,
           openModalTV:this.openModalTV,
-          closeModalTV:this.closeModalTV
+          closeModalTV: this.closeModalTV,
+          handleChange:this.handleChange
       }}>
       {this.props.children}    
      </ProductContext.Provider>
@@ -329,5 +359,6 @@ class ProductProvider extends Component {
 }
 
 const ProductConsumer = ProductContext.Consumer;
+
 
 export { ProductProvider, ProductConsumer };

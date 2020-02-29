@@ -1,9 +1,12 @@
-import React, { Component } from 'react'
+import React, { Component} from 'react'
 import Phone from './Phone.js';
 import Title from './Title';
 import {ProductConsumer} from '../context';
 export default class PhoneList extends Component {
-    render (){
+  
+  
+    render() {
+    
     return(
         <React.Fragment>
             <div className="py-5">
@@ -12,6 +15,7 @@ export default class PhoneList extends Component {
                     <div className="row">
                          <ProductConsumer>
                             {(value) => {
+                               
                                 return value.phones.map(product => {
                                     return <Phone key={product.id} phones={product}/>
                                     
