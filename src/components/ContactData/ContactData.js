@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { ProductConsumer } from '../../context';
 import { updateObject, checkValidity } from '../shared/utility';
 import Input from '../../Input/Input';
-import classes from './ContactData.css';
+import classes from './ContactData.module.css';
 export default class ContactData extends Component { 
     state = {
         orderForm: {
@@ -162,7 +162,7 @@ const inputChangedHandler = (event, inputIdentifier) => {
                                 ))}
                                 {/* <Button btnType="Success" disabled={!this.state.formIsValid}>ORDER</Button> */}
                                 <button className="btn btn-outline-danger text-uppercase mb-3 px-5"
-                                 type="button" onClick={(event)=>orderHandler(event)} >
+                                 type="button" onClick={(event)=>orderHandler(event)}  disabled={!this.state.formIsValid}>
                                 ORDER
                             </button>
                             </form>
