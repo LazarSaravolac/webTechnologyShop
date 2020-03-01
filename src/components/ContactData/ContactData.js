@@ -3,6 +3,7 @@ import { ProductConsumer } from '../../context';
 import { updateObject, checkValidity } from '../shared/utility';
 import Input from '../../Input/Input';
 import classes from './ContactData.module.css';
+import ModalCart from '../ModalCart';
 export default class ContactData extends Component { 
     state = {
         orderForm: {
@@ -11,6 +12,31 @@ export default class ContactData extends Component {
                 elementConfig: {
                     type: 'text',
                     placeholder: 'Your Name'
+                },
+                value: '',
+                validation: {
+                    required: true
+                },
+                valid: false,
+                touched: false
+            },    deliveryMethod: {
+                elementType: 'select',
+                elementConfig: {
+                    options: [
+                        {value: 'Serbia', displayValue: 'Serbia'},
+                        {value: 'BH', displayValue: 'BH'},
+                        {value: 'Croatia', displayValue: 'Croatia'}
+                    ]
+                },
+                value: 'fastest',
+                validation: {},
+                valid: true
+            },
+            city: {
+                elementType: 'input',
+                elementConfig: {
+                    type: 'text',
+                    placeholder: 'City'
                 },
                 value: '',
                 validation: {
@@ -32,35 +58,7 @@ export default class ContactData extends Component {
                 valid: false,
                 touched: false
             },
-            zipCode: {
-                elementType: 'input',
-                elementConfig: {
-                    type: 'text',
-                    placeholder: 'ZIP Code'
-                },
-                value: '',
-                validation: {
-                    required: true,
-                    minLength: 5,
-                    maxLength: 5,
-                    isNumeric: true
-                },
-                valid: false,
-                touched: false
-            },
-            country: {
-                elementType: 'input',
-                elementConfig: {
-                    type: 'text',
-                    placeholder: 'Country'
-                },
-                value: '',
-                validation: {
-                    required: true
-                },
-                valid: false,
-                touched: false
-            },
+          
             email: {
                 elementType: 'input',
                 elementConfig: {
@@ -74,21 +72,11 @@ export default class ContactData extends Component {
                 },
                 valid: false,
                 touched: false
-            },
-            deliveryMethod: {
-                elementType: 'select',
-                elementConfig: {
-                    options: [
-                        {value: 'fastest', displayValue: 'Fastest'},
-                        {value: 'cheapest', displayValue: 'Cheapest'}
-                    ]
-                },
-                value: 'fastest',
-                validation: {},
-                valid: true
             }
+
         },
-        formIsValid: false
+        formIsValid: false,
+        loading:false
     }
 
     render() {
@@ -118,9 +106,22 @@ const orderHandler = (event) => {
     console.log(order);
     
     value.onOrder();
-
+    this.setState({
+        loading: true
+    })
 }
 
+    const setTime =() => {
+        setTimeout(() => {
+            this.setState({
+                loading: false
+            });
+            this.props.history.push('/');
+            value.clearCart();
+        }, 1500);
+      
+}
+                        
 const inputChangedHandler = (event, inputIdentifier) => {
 
     const updatedFormElement = updateObject(this.state.orderForm[inputIdentifier], {
@@ -160,11 +161,15 @@ const inputChangedHandler = (event, inputIdentifier) => {
                                         touched={formElement.config.touched}
                                         changed={(event) => inputChangedHandler(event, formElement.id)} />
                                 ))}
-                                {/* <Button btnType="Success" disabled={!this.state.formIsValid}>ORDER</Button> */}
-                                <button className="btn btn-outline-danger text-uppercase mb-3 px-5"
-                                 type="button" onClick={(event)=>orderHandler(event)}  disabled={!this.state.formIsValid}>
-                                ORDER
+                                <span className={classes.proba}> 
+                                <p>
+                                        Total amount: {value.cartTotal} $
+                                </p>
+                                    <button className="btn btn-outline-success text-uppercase mb-3 px-5"
+                                        type="button" onClick={(event) => { orderHandler(event);setTime() }}  disabled={!this.state.formIsValid}>
+                                Buy
                             </button>
+                                 </span>
                             </form>
                         );
                         
@@ -176,6 +181,7 @@ const inputChangedHandler = (event, inputIdentifier) => {
                             <div className={classes.ContactData}>
                             <h4>Enter your Contact Data</h4>
                             {form}
+                                <ModalCart modal={this.state.loading}/>
                         </div>)
                         }}
                 </ProductConsumer>
