@@ -3,13 +3,16 @@ import { Link } from 'react-router-dom';
 import logo from '../logo.svg';
 import styled from 'styled-components';
 import {ButtonContainer} from './Button';
-export default class Navbar extends Component {
+
+import { connect } from 'react-redux';
+ class Navbar extends Component {
     render() {
-        return (
-            <NavWrapper className="navbar navbar-expand-sm  navbar-dark px-sm-5">
-                <Link to="/contact">
-                    <img src={logo} alt="contact" className="navbar-brand"/>
-                </Link>
+
+        let cart = null;
+
+        if(this.props.isAuthenticated){
+            cart = (
+                <React.Fragment>
                 <ul className="navbar-nav align-items-center  ml-auto">
                    
                     <li className="nav-item ml-5">
@@ -27,6 +30,17 @@ export default class Navbar extends Component {
                     my cart
                     </ButtonContainer>
                 </Link>
+                </React.Fragment>
+                );
+        }
+
+        return (
+            <NavWrapper className="navbar navbar-expand-sm  navbar-dark px-sm-5">
+                <Link to="/contact">
+                    <img src={logo} alt="contact" className="navbar-brand"/>
+                </Link>
+                
+                    {cart}
            </NavWrapper>
         )
     }
@@ -40,3 +54,12 @@ const NavWrapper = styled.nav`
         text-transform:capitalize;
     }
 `
+
+const mapStateToProps = state => {
+    return {
+        isAuthenticated: state.auth.token !== null
+    };
+};
+
+
+export default connect (mapStateToProps)(Navbar);
